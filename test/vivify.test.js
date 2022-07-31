@@ -14,7 +14,7 @@ describe('vivifyTest', function() {
 
     const fillFirstName = 'Johan';
     const fillLastName = 'Smith';
-    const fillEmail = 'johansmith@local.hhh';
+    const fillEmail = 'johansmith@localNR100.hhh';
     const fillPassword = 'johansmith15';
     const fillConfirmedPassword = 'johansmith15';
 
