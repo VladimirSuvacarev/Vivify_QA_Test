@@ -180,4 +180,11 @@ it("Test Edit Gallery", async function() {
     await driver.switchTo().defaultContent();
     await driver.sleep(1000);
 });
+
+it("Logout", async function() {
+    const logoutNewUser = await driver.findElement(By.partialLinkText('Logout'));
+    await logoutNewUser.click();
+    
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('PLEASE LOGIN');
+});
 });
