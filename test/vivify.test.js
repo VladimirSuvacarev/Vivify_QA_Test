@@ -86,12 +86,35 @@ it("Login new user", async function() {
 
     const submitButton = await driver.findElement(By.xpath(`//button`));
     await submitButton.click();
-    await driver.sleep(1000)
+    await driver.sleep(1000);
 
     const allGalleries = await driver.findElement(By.linkText('My Galleries'));
     await driver.wait(until.elementIsEnabled(allGalleries));
     expect(await allGalleries.isEnabled()).to.be.true;
 });
 
+it("Create Gallery", async function() {
+    const createGallery = await driver.findElement(By.xpath(`//a[contains(text(),'Create Gallery')]`));
+    await createGallery.click();
+
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('CREATE GALLERY');
+
+    const title = await driver.findElement(By.id('title'));
+    title.sendKeys('The Lord of the Rings 2');
+
+    const descriptions = await driver.findElement(By.id('description'));
+    descriptions.sendKeys('War of the Ring');
+     
+    const imageURL = await driver.findElement(By.xpath(`//div[@class='input-group mb-3']/input[@class='form-control']`));
+    imageURL.sendKeys('https://www.advertiser-serbia.com/advertiser/wp-content/uploads/2021/02/lord-of-the-rings.jpg');
+
+    const submitButton = await driver.findElement(By.xpath(`//button[contains(text(),'Submit')]`));
+    await submitButton.click();
+    await driver.sleep(1000);
+
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('ALL GALLERIES');
+    expect(await driver.findElement(By.css('h2')).getText()).to.eq('The Lord of the Rings 2');
+
+});
 
 });
