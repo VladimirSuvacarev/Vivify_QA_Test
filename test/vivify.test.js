@@ -114,7 +114,70 @@ it("Create Gallery", async function() {
 
     expect(await driver.findElement(By.css('h1')).getText()).to.eq('ALL GALLERIES');
     expect(await driver.findElement(By.css('h2')).getText()).to.eq('The Lord of the Rings 2');
-
 });
 
+it("Test Edit Gallery", async function() {
+    const clickOnMyGallery = await driver.findElement(By.xpath(`//a[contains(text(),'My Galleries')]`));
+    await clickOnMyGallery.click();
+    await driver.sleep(1000);
+    
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('MY GALLERIES');
+
+    const clickOnTheLordOfTheRing2 = await driver.findElement(By.xpath(`//a[contains(text(),'The Lord of the Rings 2')]`));
+    await clickOnTheLordOfTheRing2.click();
+    await driver.sleep(1000);
+
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('THE LORD OF THE RINGS 2');
+    expect(await driver.findElement(By.css('h5')).getText()).to.contain(fillFirstName +' '+ fillLastName);
+    expect(await driver.findElement(By.css('p')).getText()).to.contain('War of the Ring');
+
+    const comments = await driver.findElement(By.css('textarea'));
+    comments.sendKeys('My Precious');
+    
+    const submitButton = await driver.findElement(By.xpath(`//button[contains(text(),'Submit')]`));
+    await submitButton.click();
+    await driver.sleep(1000);
+   
+    expect(await driver.findElement(By.xpath(`//li[@class='list-group-item']/p[1]`)).getText()).to.eq('My Precious');
+
+    const deleteComent = await driver.findElement(By.xpath(`//button/i[@class='fas fa-trash']`));
+    await deleteComent.click();
+    const clickOKButton = driver.switchTo().alert();
+    expect(await clickOKButton.getText()).to.contain('Are you sure you want to delete comment?');
+    await clickOKButton.accept();
+    await driver.switchTo().defaultContent();
+    await driver.sleep(1000);
+    
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('THE LORD OF THE RINGS 2');
+    
+    const editButton = await driver.findElement(By.xpath(`//a[@class='btn btn-custom']`));
+    await editButton.click();
+    await driver.sleep(1000);
+
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('EDIT GALLERY');
+
+    const changeTitle = await driver.findElement(By.id('title'));
+    changeTitle.sendKeys(
+        Key.chord(Key.CONTROL, 'a'),
+        Key.DELETE,
+        'The Lord of the Rings');
+    const changeDescriptions = await driver.findElement(By.id('description'));
+    changeDescriptions.sendKeys('My Precious');
+    const submitButtonAfterEditing = await driver.findElement(By.xpath(`//button[contains(text(),'Submit')]`));
+    await submitButtonAfterEditing.click();
+    await driver.sleep(1000);
+    
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('THE LORD OF THE RINGS');
+    expect(await driver.findElement(By.css('p')).getText()).to.contain('My Precious');
+
+    const deleteButton = await driver.findElement(By.xpath(`//button[contains(text(),'Delete Gallery')]`));
+    await deleteButton.click();
+    await driver.sleep(1000);
+
+    const deleteGallery = driver.switchTo().alert();
+    expect(await deleteGallery.getText()).to.contain('Are you sure you want to delete gallery?');
+    await deleteGallery.accept();
+    await driver.switchTo().defaultContent();
+    await driver.sleep(1000);
+});
 });
