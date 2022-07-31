@@ -35,5 +35,44 @@ it("Opens homepage", async function() {
     expect(await driver.getCurrentUrl()).to.eq('https://gallery-app.vivifyideas.com/');
 });
 
+it("Click on register and register a new user, than confirm and logout", async function() {
+    const register = await driver.findElement(By.partialLinkText('Register'));
+    await register.click();
+    
+    expect(await driver.getCurrentUrl()).to.eq('https://gallery-app.vivifyideas.com/register');
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('REGISTER');
+    
+    const firstName = await driver.findElement(By.id('first-name'));
+    firstName.sendKeys(fillFirstName);
+
+    const lastName = await driver.findElement(By.id('last-name'));
+    lastName.sendKeys(fillLastName);
+
+    const email = await driver.findElement(By.id('email'));
+    email.sendKeys(fillEmail);
+
+    const password = await driver.findElement(By.id('password'));
+    password.sendKeys(fillPassword);
+
+    const confirmedPassword = await driver.findElement(By.id('password-confirmation'));
+    confirmedPassword.sendKeys(fillConfirmedPassword);
+
+    const acceptedTerms = await driver.findElement(By.className('form-check-input'));
+    await acceptedTerms.click();
+
+    const submitButton = await driver.findElement(By.xpath(`//button`));
+    await submitButton.click();
+    await driver.sleep(1000);
+
+    const displayAllGalleries = await driver.findElement(By.linkText('My Galleries'));
+    await driver.wait(until.elementIsEnabled(displayAllGalleries));
+    expect(await displayAllGalleries.isEnabled()).to.be.true;
+
+    const logoutNewUser = await driver.findElement(By.partialLinkText('Logout'));
+    await logoutNewUser.click();
+    
+    expect(await driver.findElement(By.css('h1')).getText()).to.eq('PLEASE LOGIN');
+});
+
 
 });
