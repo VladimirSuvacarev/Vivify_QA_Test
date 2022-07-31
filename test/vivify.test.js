@@ -74,5 +74,24 @@ it("Click on register and register a new user, than confirm and logout", async f
     expect(await driver.findElement(By.css('h1')).getText()).to.eq('PLEASE LOGIN');
 });
 
+it("Login new user", async function() {
+    const logoutNewUser = await driver.findElement(By.partialLinkText('Login'));
+    await logoutNewUser.click();
+
+    const email = await driver.findElement(By.id('email'));
+    email.sendKeys(fillEmail);
+
+    const password = await driver.findElement(By.id('password'));
+    password.sendKeys(fillPassword);
+
+    const submitButton = await driver.findElement(By.xpath(`//button`));
+    await submitButton.click();
+    await driver.sleep(1000)
+
+    const allGalleries = await driver.findElement(By.linkText('My Galleries'));
+    await driver.wait(until.elementIsEnabled(allGalleries));
+    expect(await allGalleries.isEnabled()).to.be.true;
+});
+
 
 });
